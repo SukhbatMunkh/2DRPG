@@ -1,0 +1,79 @@
+@startuml
+interface BossMobInterface {
+
+}
+
+interface MobInterface {
+
+}
+interface Item {
+
+}
+
+class chest {
+    isOpened
+}
+
+class Blocks {
+    inSceneLocationx
+    inSceneLocationy
+    size
+    pngLocation
+}
+
+class MobController {
+    inSceneLocationx
+    inSceneLocationy
+    Movement
+    Attacks
+}
+
+class Mob {
+    Location
+    Health
+    Exp
+    ExpRange for Random 0-to-that
+    Dmg
+}
+
+class BossMob {
+    SpecialAttack [1,2,3]
+    Drops
+}
+
+class PlayerController {
+    inSceneLocationx
+    inSceneLocationy
+}
+
+class Player {
+    health
+    Item[]
+    LocationScene
+    Skill?
+    Mana?
+}
+
+class Scene {
+    id
+}
+
+BossMobInterface <|-right- MobInterface : extends
+BossMob <|-right- Mob : extends
+BossMob <-- BossMobInterface
+Mob <-- MobInterface
+
+PlayerController -- Player : controlls
+Player -right-> Item : has
+
+Scene --> Mob : has
+Scene --> BossMob : has
+Scene -right-> Blocks : has
+chest <-right- Scene
+chest -left-> Item : has
+
+Item <-- BossMob : drops
+
+Mob -right- MobController
+
+@enduml
