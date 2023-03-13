@@ -1,20 +1,61 @@
 package at.htlleonding.game;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+        Group root = new Group();
+        Scene scene = new Scene( root );
+        stage.setScene( scene );
+
+        Canvas canvas = new Canvas( 512, 512 );
+        root.getChildren().add( canvas );
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        int counter = 1;
+        String directoryName = "slime";
+        String fileName = "slimeJump";
+        String fileEnding = ".jpg";
+        List<Image> slimeAnimation = new ArrayList<>();
+
+        while (Files.exists(Path.of("img/animation/" + directoryName + "/" + fileName + counter + fileEnding).toAbsolutePath())) {
+            slimeAnimation.add(new Image(Path.of("img/animation/" + directoryName + "/" + fileName + counter + fileEnding).toAbsolutePath().toString()));
+            counter++;
+        }
+
+        final long startNanoTime = System.nanoTime();
+        final long duration = 130;
+
+        new AnimationTimer()
+        {
+            public void handle(long currentNanoTime)
+            {
+                final long time = (long) (System.nanoTime() - startNanoTime)/1000000;
+                gc.drawImage(slimeAnimation.get((int) ((time % (slimeAnimation.size() * duration)) / duration)), (int) (scene.getHeight() / 2), (int) (scene.getWidth() / 2));
+            }
+        }.start();
+
+        stage.show();
+        stage.setTitle("2D RPG");
         stage.show();
     }
 
