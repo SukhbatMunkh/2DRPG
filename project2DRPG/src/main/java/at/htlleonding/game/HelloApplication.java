@@ -34,7 +34,7 @@ public class HelloApplication extends Application {
         int counter = 1;
         String directoryName = "slime";
         String fileName = "slimeJump";
-        String fileEnding = ".jpg";
+        String fileEnding = ".png";
         List<Image> slimeAnimation = new ArrayList<>();
 
         while (Files.exists(Path.of("img/animation/" + directoryName + "/" + fileName + counter + fileEnding).toAbsolutePath())) {
@@ -49,13 +49,17 @@ public class HelloApplication extends Application {
         {
             public void handle(long currentNanoTime)
             {
-                final long time = (long) (System.nanoTime() - startNanoTime)/1000000;
-                gc.drawImage(slimeAnimation.get((int) ((time % (slimeAnimation.size() * duration)) / duration)), (int) (scene.getHeight() / 2), (int) (scene.getWidth() / 2));
+                gc.clearRect(0, 0, 512, 512);
+                final long time = (currentNanoTime - startNanoTime)/1000000;
+                Image image = slimeAnimation.get((int) ((time % (slimeAnimation.size() * duration)) / duration));
+                // gc.drawImage(image, locX, locY, sizeX, sizeY);
+                gc.drawImage(image, 10, 10, 160, 160);
             }
         }.start();
 
         stage.show();
         stage.setTitle("2D RPG");
+        stage.getIcons().add(new Image(Path.of("img/animation/slime/slimeJump1.png").toAbsolutePath().toString()));
         stage.show();
     }
 
