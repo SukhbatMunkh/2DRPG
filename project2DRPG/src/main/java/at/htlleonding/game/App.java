@@ -1,28 +1,31 @@
 package at.htlleonding.game;
 
-import javafx.animation.AnimationTimer;
+import at.htlleonding.game.Controller.GameScreen;
+import at.htlleonding.game.Controller.InputController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class HelloApplication extends Application {
+public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        stage.setFullScreen(true);
         Group root = new Group();
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("2D RPG");
+        stage.show();
+
+        InputController inputController = new InputController(scene);
+        GameScreen gameScreen = new GameScreen(root);
+        gameScreen.testMethod();
+
+        /*Group root = new Group();
         Scene scene = new Scene( root );
         stage.setScene( scene );
 
@@ -42,25 +45,53 @@ public class HelloApplication extends Application {
             counter++;
         }
 
+        counter = 1;
+        directoryName = "background";
+        fileName = "background";
+        fileEnding = ".png";
+        List<Image> slimeBackgroundAnimation = new ArrayList<>();
+
+        while (Files.exists(Path.of("img/animation/" + directoryName + "/" + fileName + counter + fileEnding).toAbsolutePath())) {
+            slimeBackgroundAnimation.add(new Image(Path.of("img/animation/" + directoryName + "/" + fileName + counter + fileEnding).toAbsolutePath().toString()));
+            counter++;
+        }
+
         final long startNanoTime = System.nanoTime();
-        final long duration = 130;
+        final long durationSlimeJump = 130;
+        final long durationBackground = 1100;
 
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
             {
+                canvas.setHeight(stage.getHeight());
+                canvas.setWidth(stage.getWidth());
+
                 gc.clearRect(0, 0, 512, 512);
                 final long time = (currentNanoTime - startNanoTime)/1000000;
-                Image image = slimeAnimation.get((int) ((time % (slimeAnimation.size() * duration)) / duration));
+
+                Image background = slimeBackgroundAnimation.get((int) ((time % (slimeBackgroundAnimation.size() * durationBackground)) / durationBackground));
+                gc.drawImage(background, 0, 0, stage.getWidth(), stage.getWidth());
+
+                Image image = slimeAnimation.get((int) ((time % (slimeAnimation.size() * durationSlimeJump)) / durationSlimeJump));
                 // gc.drawImage(image, locX, locY, sizeX, sizeY);
                 gc.drawImage(image, 10, 10, 160, 160);
+
+                if (canvas.getHeight() > 600) {
+                    this.stop();
+                }
             }
         }.start();
 
         stage.show();
         stage.setTitle("2D RPG");
         stage.getIcons().add(new Image(Path.of("img/animation/slime/slimeJump1.png").toAbsolutePath().toString()));
-        stage.show();
+        stage.show();*/
+    }
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
     }
 
     public static void main(String[] args) {

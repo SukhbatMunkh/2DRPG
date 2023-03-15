@@ -6,4 +6,6 @@ module at.htlleonding.game {
 
     opens at.htlleonding.game to javafx.fxml;
     exports at.htlleonding.game;
+    exports at.htlleonding.game.Controller;
+    opens at.htlleonding.game.Controller to javafx.fxml;
 }
