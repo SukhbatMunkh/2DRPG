@@ -1,5 +1,6 @@
 package at.htlleonding.game;
 
+import at.htlleonding.game.Classes.FrameAnimation;
 import at.htlleonding.game.Controller.GameScreen;
 import at.htlleonding.game.Controller.InputController;
 import javafx.application.Application;
@@ -23,19 +24,15 @@ public class App extends Application {
         stage.setTitle("2D RPG");
         stage.show();
 
-        InputController inputController = new InputController(scene);
+        //InputController inputController = new InputController(scene);
         GameScreen gameScreen = new GameScreen(root);
-        gameScreen.testMethod();
-
 
         String directoryName = "slime";
         String fileName = "slimeJump";
         String fileEnding = ".png";
-        List<Image> slimeAnimation = gameScreen.getAnimationImages(directoryName, fileName, fileEnding);
+        FrameAnimation frameAnimation = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding), 100, 100, 130);
+        gameScreen.addAnimation(frameAnimation);
 
-        for (Image image : slimeAnimation) {
-            
-        }
 
         /*Group root = new Group();
         Scene scene = new Scene( root );

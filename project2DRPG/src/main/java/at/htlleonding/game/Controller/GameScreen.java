@@ -1,6 +1,7 @@
 package at.htlleonding.game.Controller;
 
-import at.htlleonding.game.App;
+import at.htlleonding.game.Classes.FrameAnimation;
+import javafx.animation.AnimationTimer;
 import javafx.beans.InvalidationListener;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -10,18 +11,14 @@ import javafx.stage.Window;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameScreen {
     private Canvas gameScreen;
     private String animationDirectory = Path.of("img/animation").toAbsolutePath().toString();
-
-    /* next Plan:
-    * make animation object with list of images and position
-    * make animation set/... with id (to change or delete the animation too)
-    * make Animation-Thread that animates the Animation-Object List
-    */
-
+    private Map<Long, FrameAnimation> frameAnimations;
 
     public GameScreen(Group group) {
         this.gameScreen = new Canvas();
@@ -31,18 +28,55 @@ public class GameScreen {
         InvalidationListener listener = o -> adjustScreenSize();
         this.gameScreen.getScene().getWindow().widthProperty().addListener(listener);
         this.gameScreen.getScene().getWindow().heightProperty().addListener(listener);
+
+        frameAnimations = new HashMap<>();
+        final long startNanoTime = System.nanoTime();
+
+        new AnimationTimer()
+        {
+            public void handle(long currentNanoTime)
+            {
+                gameScreen.getGraphicsContext2D().clearRect(0, 0, gameScreen.getWidth(), gameScreen.getHeight());
+                final long time = (currentNanoTime - startNanoTime);
+
+                if (frameAnimations.size() > 0) {
+                    for (Long key : frameAnimations.keySet()) {
+                        FrameAnimation a = frameAnimations.get(key);
+                        gameScreen.getGraphicsContext2D().drawImage(a.getByTime(time), a.getxLocation(), a.getyLocation(), 100, 100);
+                    }
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * adds a new animation to the screen.
+     * @param frameAnimation
+     * @return key of the animation
+     */
+    public Long addAnimation(FrameAnimation frameAnimation) {
+        Long newKey = 0l;
+
+        if (frameAnimations.size() > 0) {
+            newKey = frameAnimations.keySet().stream().max(Long::compareTo).get() + 1;
+        }
+
+        frameAnimations.put(newKey, frameAnimation);
+        return newKey;
+    }
+
+    /**
+     * deletes an animation with it's key
+     * @param key
+     */
+    public void deleteAnimation(Long key) {
+        frameAnimations.remove(key);
     }
 
     private void adjustScreenSize() {
         Window window = this.gameScreen.getScene().getWindow();
         this.gameScreen.setWidth(window.getWidth());
         this.gameScreen.setHeight(window.getHeight());
-    }
-
-    public void testMethod() {
-        System.out.println(this.gameScreen.getWidth());
-        System.out.println(this.gameScreen.getHeight());
-        this.gameScreen.getGraphicsContext2D().fillRect(100,100,300,300);
     }
 
     /**
@@ -57,7 +91,6 @@ public class GameScreen {
         List<Image> animation = new ArrayList<>();
         int counter = 1;
         String path = (this.animationDirectory + "/" + directoryName + "/" + fileName + counter + fileEnding).replace('\\', '/');
-        System.out.println(path);
 
         while (Files.exists(Path.of(path).toAbsolutePath())) {
             animation.add(new Image(path));
@@ -66,5 +99,4 @@ public class GameScreen {
         }
         return animation;
     }
-
 }
