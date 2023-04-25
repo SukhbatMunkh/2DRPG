@@ -1,6 +1,8 @@
 package at.htlleonding.game.Controller;
 
 import at.htlleonding.game.Model.FrameAnimation;
+import at.htlleonding.game.Model.SceneLevel;
+import javafx.geometry.Rectangle2D;
 import java.util.List;
 
 public class MovementController {
@@ -45,7 +47,6 @@ public class MovementController {
         extraSpeed = 0;
         this.speed = speed;
         this.animation = animation;
-        setPlayerPosition(0, 0);
     }
 
     //region <Methods>
@@ -53,27 +54,62 @@ public class MovementController {
      * moves the player via the keyboard input
      * @param keyboardInput
      */
-    public void movePlayer(List<String> keyboardInput) {
+    public void move(List<String> keyboardInput, List<FrameAnimation> frameAnimations, double speedTimeRatio) {
+        // don't move if it's not supposed to
+        if (SceneLevel.getLevelAsNumber(this.animation.getSceneLevel()) > 1) {
             for (String input : keyboardInput) {
-                switch (input) {
-                    case "W":
-                        animation.setyLocation(animation.getyLocation() - (speed + extraSpeed));
-                        //TODO:check if block or border
-                        break;
-                    case "A":
-                        animation.setxLocation(animation.getxLocation() - (speed + extraSpeed));
-                        //TODO:check if block or border
-                        break;
-                    case "S":
-                        animation.setyLocation(animation.getyLocation() + (speed + extraSpeed));
-                        //TODO:check if block or border
-                        break;
-                    case "D":
-                        animation.setxLocation(animation.getxLocation() + (speed + extraSpeed));
-                        //TODO:check if block or border
-                        break;
+                double[] movement = convertToMovement(input);
+
+                if (movement.length == 2) {
+                    double xMovement = (movement[0] * (speed + extraSpeed) * speedTimeRatio);
+                    double yMovement = (movement[1] * (speed + extraSpeed) * speedTimeRatio);
+
+                    animation.setxLocation(animation.getxLocation() + xMovement);
+                    animation.setyLocation(animation.getyLocation() + yMovement);
+
+                    boolean intersectsWithSomething = false;
+
+                    for (FrameAnimation frameAnimation : frameAnimations) {
+                        if (this.intersects(frameAnimation) && SceneLevel.getLevelAsNumber(frameAnimation.getSceneLevel()) == 1) {
+                            intersectsWithSomething = true;
+                        }
+                    }
+
+                    if (intersectsWithSomething) {
+                        animation.setxLocation(animation.getxLocation() - xMovement);
+                        animation.setyLocation(animation.getyLocation() - yMovement);
+                    }
                 }
             }
         }
+    }
+
+    public double[] convertToMovement(String input) {
+        double[] movement = new double[2];
+
+        switch (input) {
+            case "W":
+                movement[1] = -1;
+                break;
+            case "A":
+                movement[0] = -1;
+                break;
+            case "S":
+                movement[1] = 1;
+                break;
+            case "D":
+                movement[0] = 1;
+                break;
+        }
+        return movement;
+    }
+
+    public boolean intersects(FrameAnimation animation) {
+        return animation.getBoundary().intersects( this.getAnimation().getBoundary() );
+    }
+
+    public boolean intersects(Rectangle2D gameObjectBoundary) {
+        return gameObjectBoundary.intersects( this.getAnimation().getBoundary() );
+    }
     //endregion
 }

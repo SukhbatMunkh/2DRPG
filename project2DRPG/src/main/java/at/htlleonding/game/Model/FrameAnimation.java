@@ -1,5 +1,6 @@
 package at.htlleonding.game.Model;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import java.util.List;
 
@@ -85,5 +86,12 @@ public class FrameAnimation implements Comparable<FrameAnimation>
     public int compareTo(FrameAnimation o) {
         return SceneLevel.compareTo(this.sceneLevel, o.sceneLevel);
     }
+
+    public Rectangle2D getBoundary()
+    {
+        //TODO: adjust boundaries new fields
+        return new Rectangle2D(xLocation, yLocation, xSize,ySize);
+    }
+
     //endregion
 }
