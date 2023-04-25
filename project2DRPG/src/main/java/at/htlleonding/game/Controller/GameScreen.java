@@ -12,16 +12,14 @@ import javafx.stage.Window;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameScreen {
     //region <fields>
     private Canvas gameScreen;
     private String animationDirectory = Path.of("img/animation").toAbsolutePath().toString();
-    private Map<Long, Entity> entityMap;
+    private PriorityQueue<Entity> entityPriorityQueue;
     //endregion
 
     //region <Constructors>
@@ -33,36 +31,40 @@ public class GameScreen {
         return animationDirectory;
     }
 
-    public Map<Long, Entity> getEntityMap() {
-        return entityMap;
+    public PriorityQueue<Entity> getEntityPriorityQueue() {
+        return entityPriorityQueue;
     }
 
-    public void addEntity(Long key, Entity entity) {
-        this.entityMap.put(key, entity);
+    public void addEntity(Entity entity) {
+        this.entityPriorityQueue.add(entity);
     }
 
     /**
-     * deletes an animation with its key
-     * @param key
+     * Deletes all Entities with the id
+     * @param id
      */
-    public void deleteEntity(Long key) {
-        entityMap.remove(key);
+    public void deleteEntity(int id) {
+        for (Entity entity : entityPriorityQueue.stream().filter(e -> e.getId() == id).toList()) {
+            entityPriorityQueue.remove(entity);
+        }
     }
     //endregion
 
     public GameScreen(Group group) {
-        //region <Initialisation>
-        entityMap = new HashMap<>();
+        entityPriorityQueue = new PriorityQueue<>();
         this.gameScreen = new Canvas();
         group.getChildren().add(this.gameScreen);
-        adjustScreenSize();
+
         // add listener so that the Canvas is always the size of the app
         InvalidationListener listener = o -> adjustScreenSize();
         this.gameScreen.getScene().getWindow().widthProperty().addListener(listener);
         this.gameScreen.getScene().getWindow().heightProperty().addListener(listener);
-        //endregion
 
-        //region <starting the AnimationTimer Thread>
+        startScreenThread();
+    }
+
+    //region <Methods>
+    private void startScreenThread() {
         final long startNanoTime = System.nanoTime();
 
         new AnimationTimer()
@@ -79,52 +81,39 @@ public class GameScreen {
                 final long time = (currentNanoTime - startNanoTime);
 
                 //region <load images>
-                if (entityMap.size() > 0) {
-                    List<FrameAnimation> frameAnimations = new ArrayList<>();
-
-                    // put animation into a list to sort them
-                    // (we used a map and not a PriorityQueue because of the ids)
-                    for (Long key : entityMap.keySet()) {
-                        // get all animations without the animation we want to move
-                        List<FrameAnimation> frameAnimationList = new ArrayList<>();
-
-                        // for the collisions
-                        for (Long key2 : entityMap.keySet()) {
-                            if (key != key2) {
-                                frameAnimationList.add(entityMap.get(key2).getAnimation());
-                            }
-                        }
-
-                        frameAnimationList.sort(FrameAnimation::compareTo);
-                        entityMap.get(key).move(frameAnimationList);
-                        frameAnimations.add(entityMap.get(key).getAnimation());
-                    }
-
-                    // sort them by their current animation level
-                    frameAnimations.sort(FrameAnimation::compareTo);
-
+                if (entityPriorityQueue.size() > 0) {
                     // load the images to the screen
-                    for (int i = 0; i < frameAnimations.size(); i++) {
-                        //TODO: make it so that everything is fit to the screen size %
+                    for (Entity entity : entityPriorityQueue) {
+                        /* move each entity and give it a list of FrameAnimations
+                         * (the other entitys) so that collisions are possible
+                         * (naturally it doesn't get itself because it always
+                         * "intersects" with itself)
+                         */
+                        entity.move(entityPriorityQueue.stream().filter(e -> !e.equals(entity)).map(e -> e.getAnimation()).toList());
 
-                        FrameAnimation a = frameAnimations.get(i);
+                        FrameAnimation a = entity.getAnimation();
+
+                        //TODO: make the position with an ratio
                         gameScreen.getGraphicsContext2D().drawImage(a.getByTime(time), a.getxLocation(), a.getyLocation(), a.getxSize(), a.getySize());
                     }
                 }
                 //endregion
             }
         }.start();
-        //endregion
     }
 
-    //region <Methods>
     private void adjustScreenSize() {
         Window window = this.gameScreen.getScene().getWindow();
         this.gameScreen.setWidth(window.getWidth());
         this.gameScreen.setHeight(window.getHeight());
+        // TODO: min screen size and ratio screen size (background and everything)
 
-        for (long key : entityMap.keySet()) {
-            entityMap.get(key).adjustSpeedTimeRatio(this.gameScreen.getScene());
+        for (Entity entity : entityPriorityQueue) {
+            entity.adjustSpeedTimeRatio(this.gameScreen.getScene());
+
+            //TODO: need a percent in entity for that
+            /*entity.getAnimation().setxSize(gameScreen.getWidth() / 100 * entity.getAnimation().getxSize());
+            entity.getAnimation().setySize(gameScreen.getWidth() / 100 * entity.getAnimation().getySize());*/
         }
     }
 

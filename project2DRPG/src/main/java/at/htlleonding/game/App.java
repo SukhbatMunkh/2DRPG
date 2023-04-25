@@ -16,27 +16,28 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Group root = new Group();
-
-        // TODO: min screen size
         Scene scene = new Scene(root);
+
         stage.setScene(scene);
         stage.setTitle("2D RPG");
         stage.show();
+
         GameScreen gameScreen = new GameScreen(root);
         stage.setFullScreen(true);
 
-        // example
+        //region <example>
         String directoryName = "slime";
         String fileName = "slimeJump";
         String fileEnding = ".png";
         //TODO make size and location scene based (use factory in db-class)
-        FrameAnimation frameAnimation = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding), 0, 200, 100, 100, 130, SceneLevel.MOBS);
-        Entity entity = new Entity(frameAnimation, 0.5, scene);
-        gameScreen.addEntity(0L, entity);
+        FrameAnimation frameAnimation = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding), 0, 200, 10, 10, 130, SceneLevel.MOBS);
+        Entity entity = new Entity(0, frameAnimation, 0.5, scene);
+        gameScreen.addEntity(entity);
 
-        FrameAnimation frameAnimation2 = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding), 300, 200, 100, 100, 130, SceneLevel.BACKGROUND_OBJECTS);
-        Entity entity2 = new Entity(frameAnimation2, 0, scene);
-        gameScreen.addEntity(1L, entity2);
+        FrameAnimation frameAnimation2 = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding), 300, 200, 20, 20, 130, SceneLevel.BACKGROUND_OBJECTS);
+        Entity entity2 = new Entity(1, frameAnimation2, 0, scene);
+        gameScreen.addEntity(entity2);
+        //endregion
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
