@@ -1,4 +1,4 @@
-package at.htlleonding.game.Model;
+package at.htlleonding.dungeonsandportals.Model;
 
 public enum SceneLevel{
     BACKGROUND,

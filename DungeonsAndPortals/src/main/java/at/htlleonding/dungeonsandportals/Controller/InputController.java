@@ -1,7 +1,8 @@
-package at.htlleonding.game.Controller;
+package at.htlleonding.dungeonsandportals.Controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
+
 import java.util.ArrayList;
 import java.util.List;
 

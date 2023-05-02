@@ -1,8 +1,9 @@
-package at.htlleonding.game.Controller;
+package at.htlleonding.dungeonsandportals.Controller;
 
-import at.htlleonding.game.Model.FrameAnimation;
-import at.htlleonding.game.Model.SceneLevel;
+import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
+import at.htlleonding.dungeonsandportals.Model.SceneLevel;
 import javafx.geometry.Rectangle2D;
+
 import java.util.List;
 
 public class MovementController {
@@ -50,9 +51,13 @@ public class MovementController {
     }
 
     //region <Methods>
+
     /**
-     * moves the player via the keyboard input
+     * Moves the player via the keyboard input while also looking out for collisions.
+     * The movement is also connected to the speed-time-ratio (ratio on with the screen size)
      * @param keyboardInput
+     * @param frameAnimations
+     * @param speedTimeRatio
      */
     public void move(List<String> keyboardInput, List<FrameAnimation> frameAnimations, double speedTimeRatio) {
         // don't move if it's not supposed to

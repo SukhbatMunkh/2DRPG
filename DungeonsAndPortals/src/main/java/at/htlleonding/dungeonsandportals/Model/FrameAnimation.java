@@ -1,4 +1,4 @@
-package at.htlleonding.game.Model;
+package at.htlleonding.dungeonsandportals.Model;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;

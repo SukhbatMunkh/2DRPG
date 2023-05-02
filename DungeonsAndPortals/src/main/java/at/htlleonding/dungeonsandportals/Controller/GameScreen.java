@@ -1,7 +1,7 @@
-package at.htlleonding.game.Controller;
+package at.htlleonding.dungeonsandportals.Controller;
 
-import at.htlleonding.game.Model.Entity;
-import at.htlleonding.game.Model.FrameAnimation;
+import at.htlleonding.dungeonsandportals.Model.Entity;
+import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
 import javafx.animation.AnimationTimer;
 import javafx.beans.InvalidationListener;
 import javafx.scene.Group;
@@ -12,8 +12,9 @@ import javafx.stage.Window;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class GameScreen {
     //region <fields>
@@ -118,7 +119,7 @@ public class GameScreen {
     }
 
     /**
-     * Returns a List with your desired animaion-pictures
+     * Returns a List with your desired animation-pictures
      * or a list with size 0 when something went wrong
      * @param directoryName
      * @param fileName
