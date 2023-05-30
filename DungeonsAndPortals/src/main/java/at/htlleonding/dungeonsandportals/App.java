@@ -4,6 +4,7 @@ import at.htlleonding.dungeonsandportals.Model.Entity;
 import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
 import at.htlleonding.dungeonsandportals.Controller.GameScreen;
 import at.htlleonding.dungeonsandportals.Model.SceneLevel;
+import at.htlleonding.dungeonsandportals.database.DatabaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -53,28 +54,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        final String propertiesFilePath = "src/main/resources/at/htlleonding/dungeonsandportals/game.properties";
-        //TODO make method to get that path
-        final String dbFilePath = Path.of("src/main/resources/at/htlleonding/dungeonsandportals/data/").toAbsolutePath().toString();
-        final String dbNamePropertyName = "sqliteDBName";
-        Connection connection = null;
-
-        try {
-            Properties properties = new Properties();
-            properties.load(new FileInputStream(propertiesFilePath));
-            //connection = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath + properties.getProperty(dbNamePropertyName));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-
+        DatabaseController.getAllMobsForScene(0);
         launch();
     }
 }
