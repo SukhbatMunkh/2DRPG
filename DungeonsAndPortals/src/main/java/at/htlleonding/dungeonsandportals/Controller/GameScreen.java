@@ -34,6 +34,10 @@ public class GameScreen {
         return animationDirectory;
     }
 
+    public void setBackground(Image newBackground) {
+        background = newBackground;
+    }
+
     public Image getBackground() {
         return background;
     }
@@ -111,9 +115,12 @@ public class GameScreen {
 
     private void adjustScreenSize() {
         Window window = this.gameScreen.getScene().getWindow();
+        window.setWidth(window.getHeight()/30*40);
+
         this.gameScreen.setWidth(window.getWidth());
         this.gameScreen.setHeight(window.getHeight());
-        // TODO: min screen size and ratio screen size (background and everything)
+
+
 
         for (Entity entity : entityPriorityQueue) {
             entity.adjustSpeedTimeRatio(this.gameScreen.getScene());

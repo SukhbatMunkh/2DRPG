@@ -24,9 +24,11 @@ public class App extends Application {
         stage.setTitle("2D RPG");
         stage.show();
         SceneLoader.getInstance(root);
+        // for the gamescreen
+        stage.setHeight(800);
+        stage.setWidth(650);
 
         GameScreen gameScreen = new GameScreen(root);
-        stage.setFullScreen(true);
 
         //region <example>
         String directoryName = "slime";
