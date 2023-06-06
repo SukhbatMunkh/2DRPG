@@ -1,0 +1,1 @@
+INSERT INTO Mob VALUES (1, 'testMob', 100, 10, 'slime');

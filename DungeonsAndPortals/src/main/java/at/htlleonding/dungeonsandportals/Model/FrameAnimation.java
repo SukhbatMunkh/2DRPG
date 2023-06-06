@@ -90,7 +90,12 @@ public class FrameAnimation implements Comparable<FrameAnimation>
     public Rectangle2D getBoundary()
     {
         //TODO: adjust boundaries new fields
-        return new Rectangle2D(xLocation, yLocation, xSize,ySize);
+
+        if (this.sceneLevel == SceneLevel.BACKGROUND) {
+            return new Rectangle2D(xLocation, yLocation, 0, 0);
+        } else {
+            return new Rectangle2D(xLocation, yLocation, xSize, ySize);
+        }
     }
 
     //endregion

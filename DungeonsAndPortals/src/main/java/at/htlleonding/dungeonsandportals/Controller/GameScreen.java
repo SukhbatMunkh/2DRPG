@@ -19,7 +19,9 @@ import java.util.PriorityQueue;
 public class GameScreen {
     //region <fields>
     private Canvas gameScreen;
-    private String animationDirectory = Path.of("img/animation").toAbsolutePath().toString();
+    private String animationDirectory = GameScreen.class.getResource("img").toString().replace("file:/", "");
+
+    private Image background;
     private PriorityQueue<Entity> entityPriorityQueue;
     //endregion
 
@@ -30,6 +32,10 @@ public class GameScreen {
 
     public String getAnimationDirectory() {
         return animationDirectory;
+    }
+
+    public Image getBackground() {
+        return background;
     }
 
     public PriorityQueue<Entity> getEntityPriorityQueue() {
@@ -118,6 +124,10 @@ public class GameScreen {
         }
     }
 
+    public void deleteAllEntities() {
+        entityPriorityQueue.clear();
+    }
+
     /**
      * Returns a List with your desired animation-pictures
      * or a list with size 0 when something went wrong
@@ -126,16 +136,27 @@ public class GameScreen {
      * @param fileEnding
      * @return List of Images
      */
-    public List<Image> getAnimationImages(String directoryName, String fileName, String fileEnding) {
+    public List<Image> getAnimationImages(String directoryName, String fileName, String fileEnding, boolean isAnimation) {
         List<Image> animation = new ArrayList<>();
-        int counter = 1;
-        String path = (this.animationDirectory + "/" + directoryName + "/" + fileName + counter + fileEnding).replace('\\', '/');
 
-        while (Files.exists(Path.of(path).toAbsolutePath())) {
-            animation.add(new Image(path));
-            counter++;
-            path = (this.animationDirectory + "/" + directoryName + "/" + fileName + counter + fileEnding).replace('\\', '/');
+        if (isAnimation) {
+            int counter = 1;
+            String path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName + counter + "." + fileEnding);
+
+            while (Files.exists(Path.of(path).toAbsolutePath())) {
+                animation.add(new Image(path));
+                counter++;
+                path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName + counter + "." + fileEnding);
+            }
+        } else {
+            String path = (this.animationDirectory + directoryName + "/" + fileName + "." + fileEnding);
+            System.out.println(path);
+
+            if (Files.exists(Path.of(path).toAbsolutePath())) {
+                animation.add(new Image(path));
+            }
         }
+
         return animation;
     }
     //endregion

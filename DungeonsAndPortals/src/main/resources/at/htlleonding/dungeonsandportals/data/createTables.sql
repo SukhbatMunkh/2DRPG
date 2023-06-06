@@ -1,15 +1,27 @@
-drop table Scene;
+drop table SceneObjects;
+drop table SceneMobs;
 drop table Player;
+drop table Paths;
+drop table Scene;
 drop table Mob;
 drop table BehaviourPattern;
-drop table SceneMobs;
 drop table Object;
-drop table SceneObjects;
 
 create table Scene
 (
     S_id integer not null primary key,
     S_backgroundImgName text not null
+) strict;
+
+create table Paths
+(
+    P_S_from integer not null,
+    P_S_to integer not null,
+    P_directionX integer not null,
+    P_directionY integer not null,
+    constraint constraint_paths_primary_key primary key (P_S_from, P_S_to),
+    constraint constraint_paths_scene_from_foreign_key foreign key (P_S_from) references Scene(S_id),
+    constraint constraint_paths_scene_to_foreign_key foreign key (P_S_to) references Scene(S_id)
 ) strict;
 
 create table Player(
