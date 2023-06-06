@@ -115,7 +115,7 @@ public class GameScreen {
 
     private void adjustScreenSize() {
         Window window = this.gameScreen.getScene().getWindow();
-        window.setWidth(window.getHeight()/30*40);
+        window.setWidth((window.getHeight()-(window.getHeight()/12))/30*40);
 
         this.gameScreen.setWidth(window.getWidth());
         this.gameScreen.setHeight(window.getHeight());
