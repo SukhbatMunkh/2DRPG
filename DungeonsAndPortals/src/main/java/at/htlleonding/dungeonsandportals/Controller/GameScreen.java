@@ -88,11 +88,15 @@ public class GameScreen {
                 gameScreen.getGraphicsContext2D().fillRect(0, 0, gameScreen.getWidth(), gameScreen.getHeight());
                 //endregion
 
+                //set background
+                gameScreen.getGraphicsContext2D().drawImage(background, 0, 0, 600, 450); //TODO: ratio with screen size
+
                 // getting the current time from the start of the AnimationTimer
                 final long time = (currentNanoTime - startNanoTime);
 
                 //region <load images>
                 if (entityPriorityQueue.size() > 0) {
+
                     // load the images to the screen
                     for (Entity entity : entityPriorityQueue) {
                         /* move each entity and give it a list of FrameAnimations
@@ -115,20 +119,22 @@ public class GameScreen {
 
     private void adjustScreenSize() {
         Window window = this.gameScreen.getScene().getWindow();
-        window.setWidth((window.getHeight()-(window.getHeight()/12))/30*40);
+        window.setHeight(600);
+        window.setWidth(600);
 
         this.gameScreen.setWidth(window.getWidth());
         this.gameScreen.setHeight(window.getHeight());
 
-
+        /*
+        window.setWidth((window.getHeight()/6*5)/30*40);
 
         for (Entity entity : entityPriorityQueue) {
             entity.adjustSpeedTimeRatio(this.gameScreen.getScene());
 
             //TODO: need a percent in entity for that
-            /*entity.getAnimation().setxSize(gameScreen.getWidth() / 100 * entity.getAnimation().getxSize());
-            entity.getAnimation().setySize(gameScreen.getWidth() / 100 * entity.getAnimation().getySize());*/
-        }
+            entity.getAnimation().setxSize(gameScreen.getWidth() / 100 * entity.getAnimation().getxSize());
+            entity.getAnimation().setySize(gameScreen.getWidth() / 100 * entity.getAnimation().getySize());
+        }*/
     }
 
     public void deleteAllEntities() {
@@ -140,24 +146,23 @@ public class GameScreen {
      * or a list with size 0 when something went wrong
      * @param directoryName
      * @param fileName
-     * @param fileEnding
+     * @param isAnimation
      * @return List of Images
      */
-    public List<Image> getAnimationImages(String directoryName, String fileName, String fileEnding, boolean isAnimation) {
+    public List<Image> getAnimationImages(String directoryName, String fileName, boolean isAnimation){
         List<Image> animation = new ArrayList<>();
 
         if (isAnimation) {
             int counter = 1;
-            String path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName + counter + "." + fileEnding);
+            String path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
 
             while (Files.exists(Path.of(path).toAbsolutePath())) {
                 animation.add(new Image(path));
                 counter++;
-                path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName + counter + "." + fileEnding);
+                path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
             }
         } else {
-            String path = (this.animationDirectory + directoryName + "/" + fileName + "." + fileEnding);
-            System.out.println(path);
+            String path = (this.animationDirectory + directoryName + "/" + fileName);
 
             if (Files.exists(Path.of(path).toAbsolutePath())) {
                 animation.add(new Image(path));

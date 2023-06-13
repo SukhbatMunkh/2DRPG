@@ -24,25 +24,8 @@ public class App extends Application {
         stage.setTitle("2D RPG");
         stage.show();
         SceneLoader.getInstance(root);
-        // for the gamescreen
-        stage.setHeight(800);
-        stage.setWidth(650);
-
-        GameScreen gameScreen = new GameScreen(root);
-
-        //region <example>
-        String directoryName = "slime";
-        String fileName = "slimeJump";
-        String fileEnding = "png";
-        //TODO make size and location scene based (use factory in db-class)
-        FrameAnimation frameAnimation = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding, true), 0, 200, 10, 10, 130, SceneLevel.MOBS);
-        Entity entity = new Entity(0, frameAnimation, 0.5, scene);
-        gameScreen.addEntity(entity);
-
-        FrameAnimation frameAnimation2 = new FrameAnimation(gameScreen.getAnimationImages(directoryName, fileName, fileEnding, true), 300, 200, 20, 20, 130, SceneLevel.BACKGROUND_OBJECTS);
-        Entity entity2 = new Entity(1, frameAnimation2, 0, scene);
-        gameScreen.addEntity(entity2);
-        //endregion
+        // for the gamescreen to activate it's adjust screensize method
+        stage.setHeight(5);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
@@ -51,7 +34,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        //DatabaseController.getAllMobsForScene(0);
         launch();
     }
 }

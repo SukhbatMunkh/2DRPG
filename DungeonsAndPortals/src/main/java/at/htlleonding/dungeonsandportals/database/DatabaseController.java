@@ -28,9 +28,10 @@ public class DatabaseController {
 
         try {
             connection = DriverManager.getConnection(getConnectionString());
-            String sql = "SELECT M_id, M_name, M_health, M_damage, M_imgName FROM Mob;";
+            String sql = "SELECT M_id, M_name FROM Mob;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement.close();
 
             while (rs.next()) {
                 System.out.println(rs.getInt(1));
@@ -52,5 +53,38 @@ public class DatabaseController {
         }
 
         return null;
+    }
+
+    public static String getSceneBackground(int sceneID) {
+        Connection connection = null;
+        String image = null;
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "SELECT I_imgName FROM Image INNER JOIN Scene S on Image.I_id = S.S_I_img WHERE S_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, sceneID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            rs.next();
+            image = rs.getString(1);
+
+            preparedStatement.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return image;
     }
 }
