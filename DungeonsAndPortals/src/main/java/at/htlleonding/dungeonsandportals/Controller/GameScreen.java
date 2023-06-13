@@ -19,7 +19,7 @@ import java.util.PriorityQueue;
 public class GameScreen {
     //region <fields>
     private Canvas gameScreen;
-    private String animationDirectory = GameScreen.class.getResource("img").toString().replace("file:/", "");
+    private static String animationDirectory = GameScreen.class.getResource("img").toString().replace("file:/", "");
 
     private Image background;
     private PriorityQueue<Entity> entityPriorityQueue;
@@ -149,20 +149,20 @@ public class GameScreen {
      * @param isAnimation
      * @return List of Images
      */
-    public List<Image> getAnimationImages(String directoryName, String fileName, boolean isAnimation){
+    public static List<Image> getAnimationImages(String directoryName, String fileName, boolean isAnimation){
         List<Image> animation = new ArrayList<>();
 
         if (isAnimation) {
             int counter = 1;
-            String path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
+            String path = (animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
 
             while (Files.exists(Path.of(path).toAbsolutePath())) {
                 animation.add(new Image(path));
                 counter++;
-                path = (this.animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
+                path = (animationDirectory + "animation/" + directoryName + "/" + fileName.split("\\.")[0] + counter + "." + fileName.split("\\.")[1]);
             }
         } else {
-            String path = (this.animationDirectory + directoryName + "/" + fileName);
+            String path = (animationDirectory + directoryName + "/" + fileName);
 
             if (Files.exists(Path.of(path).toAbsolutePath())) {
                 animation.add(new Image(path));

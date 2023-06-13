@@ -21,6 +21,10 @@ public class FrameAnimation implements Comparable<FrameAnimation>
         return animation;
     }
 
+    public void setAnimation(List<Image> animation) {
+        this.animation = animation;
+    }
+
     public double getxLocation() {
         return xLocation;
     }

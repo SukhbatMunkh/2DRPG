@@ -1,10 +1,8 @@
 package at.htlleonding.dungeonsandportals;
 
-import at.htlleonding.dungeonsandportals.Controller.SceneLoader;
-import at.htlleonding.dungeonsandportals.Model.Entity;
-import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
 import at.htlleonding.dungeonsandportals.Controller.GameScreen;
-import at.htlleonding.dungeonsandportals.Model.SceneLevel;
+import at.htlleonding.dungeonsandportals.Controller.SceneLoader;
+import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -24,8 +22,8 @@ public class App extends Application {
         stage.setTitle("2D RPG");
         stage.show();
         SceneLoader.getInstance(root);
-        // for the gamescreen to activate it's adjust screensize method
-        stage.setHeight(5);
+        // for the gamescreen to activate its adjustscreensize method
+        stage.setHeight(1);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

@@ -1,5 +1,6 @@
 package at.htlleonding.dungeonsandportals.Controller;
 
+import at.htlleonding.dungeonsandportals.Model.Direction;
 import at.htlleonding.dungeonsandportals.Model.FrameAnimation;
 import at.htlleonding.dungeonsandportals.Model.SceneLevel;
 import javafx.geometry.Rectangle2D;
@@ -59,11 +60,19 @@ public class MovementController {
      * @param frameAnimations
      * @param speedTimeRatio
      */
-    public void move(List<String> keyboardInput, List<FrameAnimation> frameAnimations, double speedTimeRatio) {
+    public Direction move(List<String> keyboardInput, List<FrameAnimation> frameAnimations, double speedTimeRatio) {
+        Direction direction = Direction.NORTH;
+
         // don't move if it's not supposed to
         if (SceneLevel.getLevelAsNumber(this.animation.getSceneLevel()) > 1) {
             for (String input : keyboardInput) {
                 double[] movement = convertToMovement(input);
+
+                if (movement[0] > 0) {
+                    direction = Direction.EAST;
+                } else if (movement[0] < 0){
+                    direction = Direction.WEST;
+                }
 
                 if (movement.length == 2) {
                     double xMovement = (movement[0] * (speed + extraSpeed) * speedTimeRatio);
@@ -87,6 +96,8 @@ public class MovementController {
                 }
             }
         }
+
+        return direction;
     }
 
     public double[] convertToMovement(String input) {

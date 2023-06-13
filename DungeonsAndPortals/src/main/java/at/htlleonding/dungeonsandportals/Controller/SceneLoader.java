@@ -1,6 +1,7 @@
 package at.htlleonding.dungeonsandportals.Controller;
 
 import at.htlleonding.dungeonsandportals.Model.Direction;
+import at.htlleonding.dungeonsandportals.Model.Player;
 import at.htlleonding.dungeonsandportals.database.DatabaseController;
 import javafx.scene.Group;
 
@@ -8,8 +9,8 @@ public class SceneLoader {
     //region <fields>
     private static SceneLoader instance;
     private GameScreen gameScreen;
+    private Player player;
     private int curSceneID;
-
     //endregion
 
     //region <Constructors>
@@ -38,6 +39,8 @@ public class SceneLoader {
     private SceneLoader(Group group) {
         gameScreen = new GameScreen(group);
         curSceneID = 0;
+        player = new Player(0, 2, group.getScene());
+        gameScreen.addEntity(player);
     }
 
     //region <Methods>
@@ -52,13 +55,9 @@ public class SceneLoader {
 
     private void loadScene() {
         gameScreen.deleteAllEntities();
-        String backgroundName = DatabaseController.getSceneBackground(curSceneID);
+        gameScreen.addEntity(player);
 
-        if (backgroundName == null) {
-            throw new RuntimeException("The background Image wasn't found");
-        }
-
-        gameScreen.setBackground(instance.gameScreen.getAnimationImages("background", backgroundName, false).get(0));
+        gameScreen.setBackground(DatabaseController.getSceneBackground(curSceneID));
     }
     //endregion
 }

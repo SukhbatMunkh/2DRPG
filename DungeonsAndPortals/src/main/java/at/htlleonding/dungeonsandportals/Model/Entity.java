@@ -1,12 +1,11 @@
 package at.htlleonding.dungeonsandportals.Model;
 
 import at.htlleonding.dungeonsandportals.Controller.MovementController;
-import at.htlleonding.dungeonsandportals.Controller.SceneLoader;
 import javafx.scene.Scene;
 
 import java.util.List;
 
-public class Entity implements Comparable<Entity>{
+public abstract class Entity implements Comparable<Entity>{
     //region <fields>
     private int id;
     private MovementController movementController;
@@ -44,6 +43,8 @@ public class Entity implements Comparable<Entity>{
     public void move(List<FrameAnimation> frameAnimations){
         //Todo: movement playerinput or mobinput
         movementController.move(List.of("D"), frameAnimations, this.speedTimeRatio);
+
+
 
         /*
         if (movementController.getxPosition() <= 10) {

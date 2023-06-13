@@ -1,11 +1,15 @@
 package at.htlleonding.dungeonsandportals.database;
 
+import at.htlleonding.dungeonsandportals.Controller.GameScreen;
+import at.htlleonding.dungeonsandportals.Model.Direction;
 import at.htlleonding.dungeonsandportals.Model.Entity;
+import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class DatabaseController {
@@ -23,7 +27,7 @@ public class DatabaseController {
         return "jdbc:sqlite:" + dbFilePath + "\\" + properties.getProperty(dbNamePropertyName);
     }
 
-    public static Entity getAllMobsForScene(int sceneId){
+    public static Entity getAllMobsForScene(int sceneID){
         Connection connection = null;
 
         try {
@@ -55,9 +59,9 @@ public class DatabaseController {
         return null;
     }
 
-    public static String getSceneBackground(int sceneID) {
+    public static Image getSceneBackground(int sceneID) {
         Connection connection = null;
-        String image = null;
+        Image image = null;
 
         try {
             connection = DriverManager.getConnection(getConnectionString());
@@ -69,7 +73,7 @@ public class DatabaseController {
             ResultSet rs = preparedStatement.executeQuery();
 
             rs.next();
-            image = rs.getString(1);
+            image = GameScreen.getAnimationImages("background", rs.getString(1), false).get(0);
 
             preparedStatement.close();
             rs.close();
@@ -86,5 +90,45 @@ public class DatabaseController {
         }
 
         return image;
+    }
+
+    public static List<Image> getPlayerImages(Direction direction) {
+        String playerImgDirectionName = "playerGoes";
+        if (direction == Direction.WEST) {
+            playerImgDirectionName += "Left.png";
+        } else {
+            playerImgDirectionName += "Right.png";
+        }
+
+        Connection connection = null;
+        List<Image> images = null;
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "SELECT I_directoryName, I_imgName FROM Image WHERE I_imgName like ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, playerImgDirectionName);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            rs.next();
+            images = GameScreen.getAnimationImages(rs.getString(1), rs.getString(2), true);
+
+            preparedStatement.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return images;
     }
 }
