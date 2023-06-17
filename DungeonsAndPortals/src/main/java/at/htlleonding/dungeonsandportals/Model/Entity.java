@@ -1,6 +1,9 @@
 package at.htlleonding.dungeonsandportals.Model;
 
+import at.htlleonding.dungeonsandportals.App;
 import at.htlleonding.dungeonsandportals.Controller.MovementController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 
 import java.util.List;
@@ -12,7 +15,7 @@ public abstract class Entity implements Comparable<Entity>{
     private double speedTimeRatio;
     //endregion
 
-    //region <Constructors>
+    //region <Getter and Setter>
     public int getId() {
         return this.id;
     }
@@ -32,19 +35,18 @@ public abstract class Entity implements Comparable<Entity>{
     public Entity(int id, FrameAnimation animation, double speed, Scene scene) {
         this.id = id;
         movementController = new MovementController(animation, speed);
-        adjustSpeedTimeRatio(scene);
+
+        App.getStage().getScene().widthProperty().addListener((observableValue, number, t1) -> adjustSpeedTimeRatio());
     }
 
     //region <Methods>
-    public void adjustSpeedTimeRatio(Scene scene) {
-        this.speedTimeRatio = scene.getWidth()/500;
+    public void adjustSpeedTimeRatio() {
+        this.speedTimeRatio = App.getStage().getScene().getWidth()/500;
     }
 
     public void move(List<FrameAnimation> frameAnimations){
         //Todo: movement playerinput or mobinput
         movementController.move(List.of("D"), frameAnimations, this.speedTimeRatio);
-
-
 
         /*
         if (movementController.getxPosition() <= 10) {

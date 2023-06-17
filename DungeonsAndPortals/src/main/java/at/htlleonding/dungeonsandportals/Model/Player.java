@@ -1,37 +1,45 @@
 package at.htlleonding.dungeonsandportals.Model;
 
-import at.htlleonding.dungeonsandportals.Controller.InputController;
-import at.htlleonding.dungeonsandportals.database.DatabaseController;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-
-import java.util.List;
-
-public class Player extends Entity {
+public class Player {
     //region <fields>
-    private InputController inputController;
-    private Scene scene;
+    private int id;
+    private String name;
+    private int health;
+    private int mana;
+    private int killedMobs;
     //endregion
-
-    public Player(int id, double speed, Scene scene) {
-        super(id, Player.getPlayerFrameAnimation(scene, Direction.EAST), speed, scene);
-        inputController = new InputController(scene);
-        this.scene = scene;
+    //region <Getter and Setter>
+    public int getId() {
+        return id;
     }
 
-    private static FrameAnimation getPlayerFrameAnimation(Scene scene, Direction direction) {
-        List<Image> playerImages = DatabaseController.getPlayerImages(direction);
-        double ratio = 50 / playerImages.get(0).getHeight();
+    public String getName() {
+        return name;
+    }
 
-        return new FrameAnimation(playerImages, 0, 0, playerImages.get(0).getWidth() * ratio, playerImages.get(0).getHeight() * ratio, 300, SceneLevel.PLAYER);
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public int getKilledMobs() {
+        return killedMobs;
+    }
+    //endregion
+
+    public Player(int id, String name, int health, int mana, int killedMobs) {
+        this.id = id;
+        this.name = name;
+        this.health = health;
+        this.mana = mana;
+        this.killedMobs = killedMobs;
     }
 
     @Override
-    public void move(List<FrameAnimation> frameAnimations) {
-        Direction direction = super.getMovementController().move(inputController.getInput(), frameAnimations, super.getSpeedTimeRatio());
-
-        if (direction == Direction.EAST || direction == Direction.WEST) {
-            this.getMovementController().getAnimation().setAnimation(getPlayerFrameAnimation(this.scene, direction).getAnimation());
-        }
+    public String toString() {
+        return this.name;
     }
 }

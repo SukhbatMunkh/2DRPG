@@ -1,14 +1,17 @@
 package at.htlleonding.dungeonsandportals.database;
 
 import at.htlleonding.dungeonsandportals.Controller.GameScreen;
+import at.htlleonding.dungeonsandportals.Controller.SceneLoader;
 import at.htlleonding.dungeonsandportals.Model.Direction;
 import at.htlleonding.dungeonsandportals.Model.Entity;
+import at.htlleonding.dungeonsandportals.Model.Player;
 import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -130,5 +133,152 @@ public class DatabaseController {
         }
 
         return images;
+    }
+
+    public static int getPlayerStartSceneID() {
+        Connection connection = null;
+        int startSceneID = 0;
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "SELECT Pl_S_sceneLoc FROM Player WHERE Pl_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, SceneLoader.getPlayerID());
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            rs.next();
+            startSceneID = rs.getInt(1);
+
+            preparedStatement.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return startSceneID;
+    }
+
+    public static Player createNewPlayer(String playerName){
+        int baseHealth = 3;
+        int baseMana = 5;
+        int baseKilledMobs = 0;
+        int baseScene = 0;
+
+        Connection connection = null;
+        Player player = null;
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "INSERT INTO Player (Pl_name, Pl_health, Pl_manaCapacity, Pl_killedMobs, Pl_S_sceneLoc) VALUES (?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, playerName);
+            preparedStatement.setInt(2, baseHealth);
+            preparedStatement.setInt(3, baseMana);
+            preparedStatement.setInt(4, baseKilledMobs);
+            preparedStatement.setInt(5, baseScene);
+
+            if (preparedStatement.executeUpdate() == 0) {
+                throw new SQLException("Insertion of the new player failed, no rows affected");
+            }
+
+            try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    player = new Player(keys.getInt(1), playerName, baseHealth, baseMana, baseKilledMobs);
+                } else {
+                    throw new SQLException("Insertion of the new player failed, no ID obtained");
+                }
+            }
+
+            preparedStatement.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return player;
+    }
+
+    public static List<Player> getPlayers() {
+        Connection connection = null;
+        List<Player> players = new ArrayList<>();
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "SELECT PL_ID, PL_NAME, PL_HEALTH, PL_MANACAPACITY, PL_KILLEDMOBS FROM Player";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Player player = new Player(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+
+                players.add(player);
+            }
+
+            preparedStatement.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return players;
+    }
+
+    public static boolean removePlayerByID(int playerID) {
+        Connection connection = null;
+        boolean removedPlayer = true;
+
+        try {
+            connection = DriverManager.getConnection(getConnectionString());
+            String sql = "DELETE FROM Player WHERE Pl_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, playerID);
+
+            if (preparedStatement.executeUpdate() == 0) {
+                removedPlayer = false;
+            }
+
+            preparedStatement.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return removedPlayer;
     }
 }

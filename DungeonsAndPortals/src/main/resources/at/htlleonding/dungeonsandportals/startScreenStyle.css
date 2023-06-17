@@ -1,0 +1,13 @@
+ListView .list-cell {
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: darkslategrey;
+    -fx-text-fill: white;
+}
+.list-view .list-cell:odd {
+    -fx-background-color: honeydew;
+    -fx-text-fill: black;
+}

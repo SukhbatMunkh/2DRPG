@@ -6,4 +6,6 @@ module at.htlleonding.dungeonsandportals {
 
     opens at.htlleonding.dungeonsandportals to javafx.fxml;
     exports at.htlleonding.dungeonsandportals;
+    exports at.htlleonding.dungeonsandportals.FXController;
+    opens at.htlleonding.dungeonsandportals.FXController to javafx.fxml;
 }

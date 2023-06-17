@@ -16,7 +16,7 @@ public class FrameAnimation implements Comparable<FrameAnimation>
     private double duration;
     //endregion
 
-    //region <Constructors>
+    //region <Getter and Setter>
     public List<Image> getAnimation() {
         return animation;
     }

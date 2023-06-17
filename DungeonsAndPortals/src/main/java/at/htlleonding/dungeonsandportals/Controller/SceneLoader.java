@@ -1,27 +1,35 @@
 package at.htlleonding.dungeonsandportals.Controller;
 
+import at.htlleonding.dungeonsandportals.App;
 import at.htlleonding.dungeonsandportals.Model.Direction;
-import at.htlleonding.dungeonsandportals.Model.Player;
+import at.htlleonding.dungeonsandportals.Model.PlayerEntity;
 import at.htlleonding.dungeonsandportals.database.DatabaseController;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 
 public class SceneLoader {
     //region <fields>
     private static SceneLoader instance;
     private GameScreen gameScreen;
-    private Player player;
+    private static int playerID;
+    private PlayerEntity player;
     private int curSceneID;
     //endregion
 
-    //region <Constructors>
-    public static SceneLoader getInstance(Group group) {
-        if (instance == null) {
-            instance = new SceneLoader(group);
-        }
-        return getInstance();
+    //region <Getter and Setter>
+    public static int getPlayerID() {
+        return playerID;
+    }
+
+    public static void setPlayerID(int newPlayerID) {
+        playerID = newPlayerID;
     }
 
     public static SceneLoader getInstance() {
+        if (instance == null) {
+            instance = new SceneLoader();
+        }
+
         if (instance.gameScreen == null) {
             throw new RuntimeException("You first need to call the getInstance-Method with a group once");
         }
@@ -36,11 +44,25 @@ public class SceneLoader {
     }
     //endregion
 
-    private SceneLoader(Group group) {
-        gameScreen = new GameScreen(group);
+    private SceneLoader() {
+        Group root = new Group();
+        Scene scene = new Scene(root);
+        App.getStage().setScene(scene);
+
+        gameScreen = new GameScreen(root);
         curSceneID = 0;
-        player = new Player(0, 2, group.getScene());
-        gameScreen.addEntity(player);
+        player = new PlayerEntity(SceneLoader.getPlayerID(), 2, scene);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                System.out.println("TODO: Saving the player"); //TODO: Save player in db
+            }
+        }, "Shutdown-thread"));
+
+        curSceneID = DatabaseController.getPlayerStartSceneID();
+
+        App.getStage().setHeight(1); //So that the gamescreen gets adjusted
+        loadScene();
     }
 
     //region <Methods>

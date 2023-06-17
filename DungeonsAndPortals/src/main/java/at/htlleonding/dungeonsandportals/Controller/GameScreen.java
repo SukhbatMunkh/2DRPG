@@ -25,7 +25,7 @@ public class GameScreen {
     private PriorityQueue<Entity> entityPriorityQueue;
     //endregion
 
-    //region <Constructors>
+    //region <Getter and Setter>
     public Canvas getGameScreen() {
         return gameScreen;
     }
@@ -64,6 +64,7 @@ public class GameScreen {
     public GameScreen(Group group) {
         entityPriorityQueue = new PriorityQueue<>();
         this.gameScreen = new Canvas();
+        group.getChildren().removeIf(f -> true); // to clear the screen of everything and start the game
         group.getChildren().add(this.gameScreen);
 
         // add listener so that the Canvas is always the size of the app

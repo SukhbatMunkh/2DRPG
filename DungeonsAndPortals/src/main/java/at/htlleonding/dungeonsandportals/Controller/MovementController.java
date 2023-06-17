@@ -14,7 +14,7 @@ public class MovementController {
     private double extraSpeed;
     //endregion
 
-    //region <Constructors>
+    //region <Getter and Setter>
     public FrameAnimation getAnimation() {
         return this.animation;
     }

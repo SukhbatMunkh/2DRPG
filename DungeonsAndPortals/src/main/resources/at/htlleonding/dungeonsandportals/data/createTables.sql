@@ -34,13 +34,13 @@ create table Paths
 ) strict;
 
 create table Player(
-                       P_id integer not null primary key autoincrement,
-                       P_name text not null,
-                       P_health integer not null,
-                       P_manaCapacity integer not null,
-                       P_killedMobs integer not null,
-                       P_S_sceneLoc integer not null,
-                       constraint constraint_player_scene foreign key (P_S_sceneLoc) references Scene(S_id)
+                       Pl_id integer not null primary key autoincrement,
+                       Pl_name text not null,
+                       Pl_health integer not null,
+                       Pl_manaCapacity integer not null,
+                       Pl_killedMobs integer not null,
+                       Pl_S_sceneLoc integer not null,
+                       constraint constraint_player_scene foreign key (Pl_S_sceneLoc) references Scene(S_id)
 ) strict;
 
 create table Mob(
@@ -49,13 +49,14 @@ create table Mob(
                     M_health integer not null,
                     M_damage integer not null,
                     M_I_img integer not null,
+                    M_I_isBoss integer not null,
                     constraint constraint_mob_image_foreign_key foreign key (M_I_img) references Image(I_id)
 ) strict;
 
 create table Object(
                        O_id integer not null primary key,
-                       M_I_img integer not null,
-                       constraint constraint_scene_image_foreign_key foreign key (M_I_img) references Image(I_id)
+                       O_I_img integer not null,
+                       constraint constraint_scene_image_foreign_key foreign key (O_I_img) references Image(I_id)
 ) strict;
 
 create table BehaviourPattern(
