@@ -6,9 +6,9 @@ INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (3, 'Desert.png', nu
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (4, 'ForestPath.png', null);
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (5, 'ForestKeyPlace.png', null);
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (6, 'CaveEntrance.png', null);
+INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (7, 'MainBossFight.png', null);
 
 -- Animation Images
-INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (7, 'MainBossFight.png', null);
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (8, 'playerGoesLeft.png', 'player');
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (9, 'playerGoesRight.png', 'player');
 INSERT INTO Image (I_id, I_imgName, I_directoryName) VALUES (10, 'fire.png', 'fire');
@@ -33,17 +33,25 @@ INSERT INTO Scene (S_id, S_I_img) VALUES (6, 6);
 INSERT INTO Scene (S_id, S_I_img) VALUES (7, 7);
 
 -- Paths between the scenes
+-- market
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (0, 1, 1, 0);
+-- grass
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 0, -1, 0);
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 2, 0, 1);
+INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 4, 0, -1);
+INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 6, 1, 0);
+-- grassPathRight
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (2, 1, 0, -1);
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (2, 3, 1, 0);
+-- desert
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (3, 2, -1, 0);
-INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 4, 0, -1);
+-- forestPath
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (4, 1, 0, 1);
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (4, 5, 0, -1);
+-- forestKeyPlace
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (5, 4, 0, 1);
-INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (1, 6, 1, 0);
+-- caveEntrance
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (6, 1, -1, 0);
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (6, 7, 1, 0);
+-- mainBossFight
 INSERT INTO Paths (P_S_from, P_S_to, P_directionX, P_directionY) VALUES (7, 6, -1, 0);

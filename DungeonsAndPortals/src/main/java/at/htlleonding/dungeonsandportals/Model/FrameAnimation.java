@@ -88,7 +88,15 @@ public class FrameAnimation implements Comparable<FrameAnimation>
 
     @Override
     public int compareTo(FrameAnimation o) {
-        return SceneLevel.compareTo(this.sceneLevel, o.sceneLevel);
+        int thisSceneNumber = SceneLevel.getLevelAsNumber(sceneLevel);
+        int otherSceneNumber = SceneLevel.getLevelAsNumber(o.sceneLevel);
+
+        System.out.println(thisSceneNumber);
+        System.out.println(otherSceneNumber);
+        System.out.println(Integer.compare(thisSceneNumber, otherSceneNumber));
+        System.out.println("-------------------");
+
+        return Integer.compare(thisSceneNumber, otherSceneNumber);
     }
 
     public Rectangle2D getBoundary()

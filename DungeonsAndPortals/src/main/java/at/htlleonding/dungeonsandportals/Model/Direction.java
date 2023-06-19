@@ -18,4 +18,24 @@ public enum Direction {
 
         return result;
     }
+
+    public static Direction getDirectionFromArray(int[] directionArray) {
+        if (directionArray.length != 2) {
+            return null;
+        } else if (directionArray[0] != 0 && directionArray[1] == 0) {
+            if (directionArray[0] > 0) {
+                return Direction.EAST;
+            } else {
+                return Direction.WEST;
+            }
+        } else if (directionArray[0] == 0 && directionArray[1] != 0) {
+            if (directionArray[1] > 0) {
+                return Direction.NORTH;
+            } else {
+                return Direction.SOUTH;
+            }
+        } else {
+            return null;
+        }
+    }
 }

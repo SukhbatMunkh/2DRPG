@@ -23,8 +23,4 @@ public enum SceneLevel{
                 return -1;
         }
     }
-
-    public static int compareTo(SceneLevel sceneLevel1, SceneLevel sceneLevel2) {
-        return Integer.compare(SceneLevel.getLevelAsNumber(sceneLevel1), SceneLevel.getLevelAsNumber(sceneLevel2));
-    }
 }

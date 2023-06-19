@@ -4,6 +4,8 @@ import at.htlleonding.dungeonsandportals.Controller.GameScreen;
 import at.htlleonding.dungeonsandportals.Controller.SceneLoader;
 import at.htlleonding.dungeonsandportals.Model.Player;
 import at.htlleonding.dungeonsandportals.database.DatabaseController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,8 +35,6 @@ public class StartScreenController {
         //TODO: play some intro song background
         setRandomBackground();
 
-        //TODO: listen if player is selected (enable/disable reset Btn)
-
         playerObservableList = FXCollections.observableList(DatabaseController.getPlayers());
 
         this.playerListView.setItems(playerObservableList);
@@ -60,8 +60,7 @@ public class StartScreenController {
 
         if (playerObservableList.contains(player)) {
             startBtn.setDisable(true); //to prevent it from being pressed twice
-            SceneLoader.setPlayerID(player.getId());
-            SceneLoader.getInstance(); //To start everything
+            SceneLoader.setPlayer(player); //To start everything
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please choose a player!");
             alert.show();
@@ -71,6 +70,12 @@ public class StartScreenController {
     @FXML
     public void deleteBtnPressed(ActionEvent actionEvent) {
         Player player = playerListView.getSelectionModel().getSelectedItem();
+
+        if (player == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please click on a player you want to delete");
+            alert.show();
+            return;
+        }
 
         Label label = new Label("Do you really want to delete the player: " + player.getName() + "?");
         label.setStyle("-fx-font-weight: bold; -fx-font-size: 14");

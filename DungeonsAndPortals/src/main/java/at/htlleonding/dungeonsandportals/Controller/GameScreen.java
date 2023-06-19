@@ -22,7 +22,7 @@ public class GameScreen {
     private static String animationDirectory = GameScreen.class.getResource("img").toString().replace("file:/", "");
 
     private Image background;
-    private PriorityQueue<Entity> entityPriorityQueue;
+    private List<Entity> entityList;
     //endregion
 
     //region <Getter and Setter>
@@ -42,12 +42,13 @@ public class GameScreen {
         return background;
     }
 
-    public PriorityQueue<Entity> getEntityPriorityQueue() {
-        return entityPriorityQueue;
+    public List<Entity> getEntityList() {
+        return entityList;
     }
 
     public void addEntity(Entity entity) {
-        this.entityPriorityQueue.add(entity);
+        this.entityList.add(entity);
+        entityList.sort(Entity::compareTo);
     }
 
     /**
@@ -55,14 +56,14 @@ public class GameScreen {
      * @param id
      */
     public void deleteEntity(int id) {
-        for (Entity entity : entityPriorityQueue.stream().filter(e -> e.getId() == id).toList()) {
-            entityPriorityQueue.remove(entity);
+        for (Entity entity : entityList.stream().filter(e -> e.getId() == id).toList()) {
+            entityList.remove(entity);
         }
     }
     //endregion
 
     public GameScreen(Group group) {
-        entityPriorityQueue = new PriorityQueue<>();
+        entityList = new ArrayList<>();
         this.gameScreen = new Canvas();
         group.getChildren().removeIf(f -> true); // to clear the screen of everything and start the game
         group.getChildren().add(this.gameScreen);
@@ -96,16 +97,15 @@ public class GameScreen {
                 final long time = (currentNanoTime - startNanoTime);
 
                 //region <load images>
-                if (entityPriorityQueue.size() > 0) {
-
+                if (entityList.size() > 0) {
                     // load the images to the screen
-                    for (Entity entity : entityPriorityQueue) {
+                    for (Entity entity : entityList) {
                         /* move each entity and give it a list of FrameAnimations
                          * (the other entitys) so that collisions are possible
                          * (naturally it doesn't get itself because it always
                          * "intersects" with itself)
                          */
-                        entity.move(entityPriorityQueue.stream().filter(e -> !e.equals(entity)).map(e -> e.getAnimation()).toList());
+                        entity.move(entityList.stream().filter(e -> !e.equals(entity)).map(e -> e.getAnimation()).toList());
 
                         FrameAnimation a = entity.getAnimation();
 
@@ -139,7 +139,7 @@ public class GameScreen {
     }
 
     public void deleteAllEntities() {
-        entityPriorityQueue.clear();
+        entityList.clear();
     }
 
     /**
