@@ -2,8 +2,6 @@ package at.htlleonding.dungeonsandportals.Model;
 
 import at.htlleonding.dungeonsandportals.App;
 import at.htlleonding.dungeonsandportals.Controller.MovementController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 
 import java.util.List;
