@@ -99,7 +99,8 @@ public class GameScreen {
                 //region <load images>
                 if (entityList.size() > 0) {
                     // load the images to the screen
-                    for (Entity entity : entityList) {
+                    for (int i = 0; i < entityList.size(); i++) {
+                        Entity entity = entityList.get(i);
                         /* move each entity and give it a list of FrameAnimations
                          * (the other entitys) so that collisions are possible
                          * (naturally it doesn't get itself because it always

@@ -62,6 +62,7 @@ public class SceneLoader {
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
+                System.out.println("Saving the player...");
                 DatabaseController.savePlayer(player, curSceneID);
             }
         }, "Shutdown-thread"));

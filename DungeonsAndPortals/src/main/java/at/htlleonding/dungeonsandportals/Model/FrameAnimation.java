@@ -91,11 +91,6 @@ public class FrameAnimation implements Comparable<FrameAnimation>
         int thisSceneNumber = SceneLevel.getLevelAsNumber(sceneLevel);
         int otherSceneNumber = SceneLevel.getLevelAsNumber(o.sceneLevel);
 
-        System.out.println(thisSceneNumber);
-        System.out.println(otherSceneNumber);
-        System.out.println(Integer.compare(thisSceneNumber, otherSceneNumber));
-        System.out.println("-------------------");
-
         return Integer.compare(thisSceneNumber, otherSceneNumber);
     }
 
